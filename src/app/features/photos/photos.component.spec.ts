@@ -156,13 +156,13 @@ describe('PhotosComponent', () => {
 
     expect(cards().length).toBe(5);
     expect(sentinel()).toBeNull();
-    expect(element.textContent).not.toContain('No photos available.');
+    expect(element.textContent).not.toContain('No photos available');
   });
 
   it('shows a fallback text instead of the grid when there are no photos', async () => {
     await respond([]);
 
     expect(grid()).toBeNull();
-    expect(element.textContent).toContain('No photos available.');
+    expect(element.textContent).toContain('No photos available');
   });
 });

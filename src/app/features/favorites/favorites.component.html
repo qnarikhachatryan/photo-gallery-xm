@@ -1,0 +1,14 @@
+@let photos = favorites.favorites();
+
+@if (photos.length) {
+  <app-photo-grid
+    [photos]="photos"
+    [favoriteIds]="favorites.favoriteIds()"
+    (photoSelect)="openPhoto($event)"
+  />
+} @else {
+  <div class="favorites__empty">
+    <p>No favorites yet</p>
+    <a matButton="outlined" routerLink="/">Browse photos</a>
+  </div>
+}
