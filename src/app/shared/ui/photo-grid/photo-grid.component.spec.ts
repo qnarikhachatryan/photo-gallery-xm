@@ -43,8 +43,8 @@ describe('PhotoGridComponent', () => {
     fixture.componentRef.setInput('favoriteIds', new Set(['2']));
     await fixture.whenStable();
 
-    const icons = cards().map(card => card.querySelector('.photo-card__icon')!.textContent?.trim());
-    expect(icons).toEqual(['favorite_border', 'favorite', 'favorite_border']);
+    const active = cards().map(card => card.querySelector('.photo-card__icon--active') !== null);
+    expect(active).toEqual([false, true, false]);
   });
 
   it('gives loading priority only to the first six photos', async () => {

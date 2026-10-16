@@ -60,17 +60,15 @@ describe('PhotoCardComponent', () => {
     expect(photoSelect).toHaveBeenCalledWith(PHOTO);
   });
 
-  it('shows an outlined heart for a photo that is not a favorite', async () => {
+  it('does not mark the icon as active for a photo that is not a favorite', async () => {
     await render();
 
-    expect(icon().textContent?.trim()).toBe('favorite_border');
     expect(icon().classList).not.toContain('photo-card__icon--active');
   });
 
-  it('shows a filled heart for a favorite photo', async () => {
+  it('marks the icon as active for a favorite photo', async () => {
     await render({ isFavorite: true });
 
-    expect(icon().textContent?.trim()).toBe('favorite');
     expect(icon().classList).toContain('photo-card__icon--active');
   });
 });

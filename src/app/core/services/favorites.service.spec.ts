@@ -63,7 +63,8 @@ describe('FavoritesService', () => {
       const service = createService();
       const photo = createPhoto('1');
 
-      expect(service.add(photo)).toBe(true);
+      service.add(photo);
+
       expect(service.favorites()).toEqual([photo]);
       expect(service.count()).toBe(1);
       expect(service.isFavorite('1')).toBe(true);
@@ -73,7 +74,8 @@ describe('FavoritesService', () => {
       const service = createService();
       service.add(createPhoto('1'));
 
-      expect(service.add(createPhoto('1'))).toBe(false);
+      service.add(createPhoto('1'));
+
       expect(service.count()).toBe(1);
     });
   });
@@ -97,6 +99,27 @@ describe('FavoritesService', () => {
       service.remove('missing');
 
       expect(service.count()).toBe(1);
+    });
+  });
+
+  describe('toggle', () => {
+    it('adds a photo that is not a favorite', () => {
+      const service = createService();
+      const photo = createPhoto('1');
+
+      service.toggle(photo);
+
+      expect(service.favorites()).toEqual([photo]);
+    });
+
+    it('removes a photo that is already a favorite', () => {
+      const service = createService();
+      const photo = createPhoto('1');
+      service.add(photo);
+
+      service.toggle(photo);
+
+      expect(service.favorites()).toEqual([]);
     });
   });
 

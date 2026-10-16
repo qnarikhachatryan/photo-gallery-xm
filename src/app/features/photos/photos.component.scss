@@ -1,0 +1,30 @@
+:host {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.photos__loader--initial {
+  flex: 1;
+  align-items: center;
+}
+
+.photos__error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 0;
+  color: var(--mat-sys-error);
+}
+
+.photos__empty {
+  padding: 48px 0;
+  text-align: center;
+  font: var(--mat-sys-title-medium);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.photos__sentinel {
+  height: 1px;
+}

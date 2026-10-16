@@ -1,0 +1,21 @@
+@let photos = store.photos();
+@let isEmpty = photos.length === 0;
+
+@if (!isEmpty) {
+  <app-photo-grid
+    [photos]="photos"
+    [favoriteIds]="favorites.favoriteIds()"
+    (photoSelect)="favorites.toggle($event)"
+  />
+} @if (store.loading()) {
+  <app-loader [class.photos__loader--initial]="isEmpty" />
+} @else if (store.error()) {
+  <div class="photos__error">
+    <p>Could not load photos.</p>
+    <button matButton="outlined" type="button" (click)="store.loadNext()">Try again</button>
+  </div>
+} @else if (store.hasMore()) {
+  <div class="photos__sentinel" appInfiniteScroll (scrolled)="store.loadNext()"></div>
+} @else if (isEmpty) {
+  <p class="photos__empty">No photos available.</p>
+}

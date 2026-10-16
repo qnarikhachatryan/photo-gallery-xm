@@ -21,16 +21,21 @@ export class FavoritesService {
     return this.favoriteIds().has(id);
   }
 
-  add(photo: Photo): boolean {
-    if (this.isFavorite(photo.id)) {
-      return false;
+  add(photo: Photo): void {
+    if (!this.isFavorite(photo.id)) {
+      this.favoritesSignal.update(favorites => [...favorites, photo]);
     }
-
-    this.favoritesSignal.update(favorites => [...favorites, photo]);
-    return true;
   }
 
   remove(id: string): void {
     this.favoritesSignal.update(favorites => favorites.filter(photo => photo.id !== id));
+  }
+
+  toggle(photo: Photo): void {
+    if (this.isFavorite(photo.id)) {
+      this.remove(photo.id);
+    } else {
+      this.add(photo);
+    }
   }
 }
