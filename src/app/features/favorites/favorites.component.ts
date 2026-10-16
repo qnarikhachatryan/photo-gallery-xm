@@ -16,7 +16,14 @@ export class FavoritesComponent {
   private readonly router = inject(Router);
 
   protected readonly favorites = inject(FavoritesService);
-  protected readonly photos = computed(() => this.favorites.favoriteIds().map(id => ({ id }) as Photo));
+  protected readonly photos = computed(() => this.favorites.favoriteIds().map(id => ({
+    id,
+    author: '',
+    width: 0,
+    height: 0,
+    url: '',
+    download_url: ''
+  }) satisfies Photo));
 
   protected openPhoto(id: string): void {
     this.router.navigate(['/photos', id]);
