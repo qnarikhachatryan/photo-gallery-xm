@@ -1,18 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
 import { FAVORITES_STORAGE_KEY } from '../constants/storage.constants';
-import { Photo } from '../models/photo.model';
 import { FavoritesService } from './favorites.service';
 import { StorageService } from './storage.service';
-
-const createPhoto = (id: string): Photo => ({
-  id,
-  author: `Author ${id}`,
-  width: 100,
-  height: 100,
-  url: `https://unsplash.com/photos/${id}`,
-  download_url: `https://picsum.photos/id/${id}/100/100`
-});
 
 describe('FavoritesService', () => {
   const storage = {
@@ -34,103 +24,95 @@ describe('FavoritesService', () => {
   });
 
   describe('restoring from storage', () => {
-    it('reads favorites by the favorites storage key', () => {
+    it('reads favorite ids by the favorites storage key', () => {
       createService();
 
       expect(storage.get).toHaveBeenCalledWith(FAVORITES_STORAGE_KEY);
     });
 
     it('starts empty when nothing is stored', () => {
-      const service = createService();
-
-      expect(service.favorites()).toEqual([]);
-      expect(service.count()).toBe(0);
+      expect(createService().favoriteIds()).toEqual([]);
     });
 
-    it('restores previously stored favorites', () => {
-      const photos = [createPhoto('1'), createPhoto('2')];
-      storage.get.mockReturnValue(photos);
+    it('restores previously stored favorite ids', () => {
+      storage.get.mockReturnValue(['1', '2']);
 
       const service = createService();
 
-      expect(service.favorites()).toEqual(photos);
+      expect(service.favoriteIds()).toEqual(['1', '2']);
       expect(service.isFavorite('2')).toBe(true);
     });
   });
 
   describe('add', () => {
-    it('adds a photo to favorites', () => {
+    it('adds a photo id to favorites', () => {
       const service = createService();
-      const photo = createPhoto('1');
 
-      service.add(photo);
+      service.add('1');
 
-      expect(service.favorites()).toEqual([photo]);
-      expect(service.count()).toBe(1);
+      expect(service.favoriteIds()).toEqual(['1']);
+      expect(service.favoriteIdSet().has('1')).toBe(true);
       expect(service.isFavorite('1')).toBe(true);
     });
 
-    it('ignores a photo that is already a favorite', () => {
+    it('ignores an id that is already a favorite', () => {
       const service = createService();
-      service.add(createPhoto('1'));
+      service.add('1');
 
-      service.add(createPhoto('1'));
+      service.add('1');
 
-      expect(service.count()).toBe(1);
+      expect(service.favoriteIds()).toEqual(['1']);
     });
   });
 
   describe('remove', () => {
-    it('removes a photo from favorites by id', () => {
+    it('removes a photo id from favorites', () => {
       const service = createService();
-      service.add(createPhoto('1'));
-      service.add(createPhoto('2'));
+      service.add('1');
+      service.add('2');
 
       service.remove('1');
 
-      expect(service.favorites().map(photo => photo.id)).toEqual(['2']);
+      expect(service.favoriteIds()).toEqual(['2']);
       expect(service.isFavorite('1')).toBe(false);
     });
 
-    it('does nothing when the photo is not a favorite', () => {
+    it('does nothing when the id is not a favorite', () => {
       const service = createService();
-      service.add(createPhoto('1'));
+      service.add('1');
 
       service.remove('missing');
 
-      expect(service.count()).toBe(1);
+      expect(service.favoriteIds()).toEqual(['1']);
     });
   });
 
   describe('toggle', () => {
-    it('adds a photo that is not a favorite', () => {
+    it('adds an id that is not a favorite', () => {
       const service = createService();
-      const photo = createPhoto('1');
 
-      service.toggle(photo);
+      service.toggle('1');
 
-      expect(service.favorites()).toEqual([photo]);
+      expect(service.favoriteIds()).toEqual(['1']);
     });
 
-    it('removes a photo that is already a favorite', () => {
+    it('removes an id that is already a favorite', () => {
       const service = createService();
-      const photo = createPhoto('1');
-      service.add(photo);
+      service.add('1');
 
-      service.toggle(photo);
+      service.toggle('1');
 
-      expect(service.favorites()).toEqual([]);
+      expect(service.favoriteIds()).toEqual([]);
     });
   });
 
   describe('persistence', () => {
-    it('writes favorites to storage after they change', () => {
+    it('writes only the favorite ids to storage after they change', () => {
       const service = createService();
-      const photo = createPhoto('1');
 
-      service.add(photo);
+      service.add('1');
       TestBed.tick();
-      expect(storage.set).toHaveBeenLastCalledWith(FAVORITES_STORAGE_KEY, [photo]);
+      expect(storage.set).toHaveBeenLastCalledWith(FAVORITES_STORAGE_KEY, ['1']);
 
       service.remove('1');
       TestBed.tick();

@@ -1,17 +1,16 @@
 @let currentPhoto = photo();
-@let favorite = isFavorite();
 
-<button type="button" class="photo-card" (click)="photoSelect.emit(currentPhoto)">
+<button type="button" class="photo-card" (click)="photoSelect.emit(currentPhoto.id)">
   <img
     class="photo-card__image"
     [ngSrc]="thumbnailUrl()"
-    [alt]="'Photo by ' + currentPhoto.author"
+    [alt]="currentPhoto.author"
     [width]="thumbnailWidth"
     [height]="thumbnailHeight"
     [priority]="priority()"
   />
 
-  <mat-icon class="photo-card__icon" [class.photo-card__icon--active]="favorite">
+  <mat-icon class="photo-card__icon" [class.photo-card__icon--active]="isFavorite()">
     favorite
   </mat-icon>
 </button>

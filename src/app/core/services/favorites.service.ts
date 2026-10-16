@@ -1,41 +1,39 @@
 import { computed, effect, inject, Service, signal } from '@angular/core';
 
 import { FAVORITES_STORAGE_KEY } from '../constants/storage.constants';
-import { Photo } from '../models/photo.model';
 import { StorageService } from './storage.service';
 
 @Service()
 export class FavoritesService {
   private readonly storage = inject(StorageService);
-  private readonly favoritesSignal = signal<Photo[]>(this.storage.get<Photo[]>(FAVORITES_STORAGE_KEY) ?? []);
+  private readonly favoriteIdsSignal = signal<string[]>(this.storage.get<string[]>(FAVORITES_STORAGE_KEY) ?? []);
 
-  readonly favorites = this.favoritesSignal.asReadonly();
-  readonly count = computed(() => this.favoritesSignal().length);
-  readonly favoriteIds = computed(() => new Set(this.favoritesSignal().map(photo => photo.id)));
+  readonly favoriteIds = this.favoriteIdsSignal.asReadonly();
+  readonly favoriteIdSet = computed(() => new Set(this.favoriteIdsSignal()));
 
   constructor() {
-    effect(() => this.storage.set(FAVORITES_STORAGE_KEY, this.favoritesSignal()));
+    effect(() => this.storage.set(FAVORITES_STORAGE_KEY, this.favoriteIdsSignal()));
   }
 
   isFavorite(id: string): boolean {
-    return this.favoriteIds().has(id);
+    return this.favoriteIdSet().has(id);
   }
 
-  add(photo: Photo): void {
-    if (!this.isFavorite(photo.id)) {
-      this.favoritesSignal.update(favorites => [...favorites, photo]);
+  add(id: string): void {
+    if (!this.isFavorite(id)) {
+      this.favoriteIdsSignal.update(ids => [...ids, id]);
     }
   }
 
   remove(id: string): void {
-    this.favoritesSignal.update(favorites => favorites.filter(photo => photo.id !== id));
+    this.favoriteIdsSignal.update(ids => ids.filter(favoriteId => favoriteId !== id));
   }
 
-  toggle(photo: Photo): void {
-    if (this.isFavorite(photo.id)) {
-      this.remove(photo.id);
+  toggle(id: string): void {
+    if (this.isFavorite(id)) {
+      this.remove(id);
     } else {
-      this.add(photo);
+      this.add(id);
     }
   }
 }

@@ -56,12 +56,12 @@ describe('PhotoGridComponent', () => {
     expect(priorities).toEqual([true, true, true, true, true, true, false, false]);
   });
 
-  it('emits the selected photo', () => {
+  it('emits the id of the selected photo', () => {
     const photoSelect = vi.fn();
     fixture.componentInstance.photoSelect.subscribe(photoSelect);
 
     cards()[1].querySelector('button')!.click();
 
-    expect(photoSelect).toHaveBeenCalledWith(photos[1]);
+    expect(photoSelect).toHaveBeenCalledWith('2');
   });
 });

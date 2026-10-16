@@ -3,28 +3,19 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 
-import { Photo } from '@core/models/photo.model';
 import { FavoritesService } from '@core/services/favorites.service';
+import { environment } from '@env/environment';
 
 import { FavoritesComponent } from './favorites.component';
 
 @Component({ template: '' })
 class DummyPageComponent {}
 
-const createPhoto = (id: string): Photo => ({
-  id,
-  author: `Author ${id}`,
-  width: 100,
-  height: 100,
-  url: `https://unsplash.com/photos/${id}`,
-  download_url: `https://picsum.photos/id/${id}/100/100`
-});
-
 describe('FavoritesComponent', () => {
-  const favoritePhotos = signal<Photo[]>([]);
+  const favoriteIds = signal<string[]>([]);
   const favorites = {
-    favorites: favoritePhotos.asReadonly(),
-    favoriteIds: computed(() => new Set(favoritePhotos().map(photo => photo.id)))
+    favoriteIds: favoriteIds.asReadonly(),
+    favoriteIdSet: computed(() => new Set(favoriteIds()))
   };
 
   let harness: RouterTestingHarness;
@@ -32,8 +23,8 @@ describe('FavoritesComponent', () => {
 
   const cards = (): HTMLElement[] => Array.from(element.querySelectorAll('app-photo-card'));
 
-  const render = async (photos: Photo[]): Promise<void> => {
-    favoritePhotos.set(photos);
+  const render = async (ids: string[]): Promise<void> => {
+    favoriteIds.set(ids);
     harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/favorites', FavoritesComponent);
     element = harness.routeNativeElement!;
@@ -53,14 +44,21 @@ describe('FavoritesComponent', () => {
   });
 
   it('renders all favorite photos marked as favorites', async () => {
-    await render([createPhoto('1'), createPhoto('2')]);
+    await render(['1', '2']);
 
     expect(cards().length).toBe(2);
     expect(element.querySelectorAll('.photo-card__icon--active').length).toBe(2);
   });
 
+  it('builds the thumbnails from the stored ids', async () => {
+    await render(['1', '2']);
+
+    const sources = cards().map(card => card.querySelector('img')!.getAttribute('src'));
+    expect(sources).toEqual([`${environment.galleryApiUrl}/id/1/400/300`, `${environment.galleryApiUrl}/id/2/400/300`]);
+  });
+
   it('opens the single photo page when a photo is clicked', async () => {
-    await render([createPhoto('1'), createPhoto('2')]);
+    await render(['1', '2']);
 
     cards()[1].querySelector('button')!.click();
     await harness.fixture.whenStable();

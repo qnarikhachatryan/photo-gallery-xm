@@ -1,4 +1,4 @@
-import { computed, signal } from '@angular/core';
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 
@@ -18,9 +18,9 @@ const PHOTO: Photo = {
 };
 
 describe('PhotoDetailStore', () => {
-  const favoritePhotos = signal<Photo[]>([]);
+  const favoriteIds = signal<string[]>([]);
   const favorites = {
-    favoriteIds: computed(() => new Set(favoritePhotos().map(photo => photo.id))),
+    isFavorite: (id: string) => favoriteIds().includes(id),
     toggle: vi.fn()
   };
   const photoApi = { getPhoto: vi.fn() };
@@ -30,7 +30,7 @@ describe('PhotoDetailStore', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    favoritePhotos.set([]);
+    favoriteIds.set([]);
     response = new Subject<Photo>();
     photoApi.getPhoto.mockReturnValue(response);
 
@@ -77,7 +77,7 @@ describe('PhotoDetailStore', () => {
 
     expect(store.isFavorite()).toBe(false);
 
-    favoritePhotos.set([PHOTO]);
+    favoriteIds.set(['7']);
 
     expect(store.isFavorite()).toBe(true);
   });
@@ -88,7 +88,7 @@ describe('PhotoDetailStore', () => {
 
     store.toggleFavorite();
 
-    expect(favorites.toggle).toHaveBeenCalledWith(PHOTO);
+    expect(favorites.toggle).toHaveBeenCalledWith('7');
   });
 
   it('does nothing on toggle when no photo is loaded', () => {

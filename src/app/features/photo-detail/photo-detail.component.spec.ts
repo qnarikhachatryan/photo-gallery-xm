@@ -1,4 +1,4 @@
-import { computed, signal } from '@angular/core';
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, Subject, throwError } from 'rxjs';
 
@@ -18,15 +18,11 @@ const PHOTO: Photo = {
 };
 
 describe('PhotoDetailComponent', () => {
-  const favoritePhotos = signal<Photo[]>([]);
+  const favoriteIds = signal<string[]>([]);
   const favorites = {
-    favoriteIds: computed(() => new Set(favoritePhotos().map(photo => photo.id))),
-    toggle: vi.fn((photo: Photo) =>
-      favoritePhotos.update(photos =>
-        photos.some(favorite => favorite.id === photo.id)
-          ? photos.filter(favorite => favorite.id !== photo.id)
-          : [...photos, photo]
-      )
+    isFavorite: (id: string) => favoriteIds().includes(id),
+    toggle: vi.fn((id: string) =>
+      favoriteIds.update(ids => (ids.includes(id) ? ids.filter(favoriteId => favoriteId !== id) : [...ids, id]))
     )
   };
   const photoApi = { getPhoto: vi.fn() };
@@ -46,7 +42,7 @@ describe('PhotoDetailComponent', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    favoritePhotos.set([]);
+    favoriteIds.set([]);
     photoApi.getPhoto.mockReturnValue(of(PHOTO));
 
     TestBed.configureTestingModule({
@@ -89,7 +85,7 @@ describe('PhotoDetailComponent', () => {
   });
 
   it('offers to remove a favorite photo from favorites', async () => {
-    favoritePhotos.set([PHOTO]);
+    favoriteIds.set(['7']);
 
     await render('7');
 
@@ -105,13 +101,13 @@ describe('PhotoDetailComponent', () => {
   });
 
   it('toggles the photo in favorites and updates the button', async () => {
-    favoritePhotos.set([PHOTO]);
+    favoriteIds.set(['7']);
     await render('7');
 
     button()!.click();
     await fixture.whenStable();
 
-    expect(favorites.toggle).toHaveBeenCalledWith(PHOTO);
+    expect(favorites.toggle).toHaveBeenCalledWith('7');
     expect(image()).not.toBeNull();
     expect(button()!.textContent).toContain('Add to favorites');
 

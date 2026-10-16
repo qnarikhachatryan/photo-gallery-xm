@@ -33,7 +33,7 @@ describe('PhotoCardComponent', () => {
     await render();
 
     expect(image().getAttribute('src')).toBe(`${environment.galleryApiUrl}/id/7/400/300`);
-    expect(image().getAttribute('alt')).toBe('Photo by Alejandro Escamilla');
+    expect(image().getAttribute('alt')).toBe('Alejandro Escamilla');
   });
 
   it('lazy loads the image by default', async () => {
@@ -50,14 +50,14 @@ describe('PhotoCardComponent', () => {
     expect(image().getAttribute('fetchpriority')).toBe('high');
   });
 
-  it('emits the photo when clicked', async () => {
+  it('emits the photo id when clicked', async () => {
     await render();
     const photoSelect = vi.fn();
     fixture.componentInstance.photoSelect.subscribe(photoSelect);
 
     element.querySelector('button')!.click();
 
-    expect(photoSelect).toHaveBeenCalledWith(PHOTO);
+    expect(photoSelect).toHaveBeenCalledWith('7');
   });
 
   it('does not mark the icon as active for a photo that is not a favorite', async () => {

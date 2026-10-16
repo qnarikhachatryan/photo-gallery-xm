@@ -18,7 +18,7 @@ export class PhotoDetailStore {
   readonly loading = this.loadingSignal.asReadonly();
   readonly isFavorite = computed(() => {
     const photo = this.photoSignal();
-    return !!photo && this.favorites.favoriteIds().has(photo.id);
+    return !!photo && this.favorites.isFavorite(photo.id);
   });
 
   load(id: string): void {
@@ -39,7 +39,7 @@ export class PhotoDetailStore {
   toggleFavorite(): void {
     const photo = this.photoSignal();
     if (photo) {
-      this.favorites.toggle(photo);
+      this.favorites.toggle(photo.id);
     }
   }
 }

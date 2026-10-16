@@ -46,7 +46,7 @@ describe('PhotosComponent', () => {
   let responses: Subject<Photo[]>[];
 
   const photoApi = { getPhotos: vi.fn() };
-  const favorites = { favoriteIds: signal(new Set<string>()), toggle: vi.fn() };
+  const favorites = { favoriteIdSet: signal(new Set<string>()), toggle: vi.fn() };
 
   const grid = (): HTMLElement | null => element.querySelector('app-photo-grid');
   const cards = (): HTMLElement[] => Array.from(element.querySelectorAll('app-photo-card'));
@@ -70,7 +70,7 @@ describe('PhotosComponent', () => {
     MockIntersectionObserver.instances = [];
     vi.stubGlobal('IntersectionObserver', MockIntersectionObserver);
     vi.clearAllMocks();
-    favorites.favoriteIds.set(new Set());
+    favorites.favoriteIdSet.set(new Set());
     photoApi.getPhotos.mockImplementation(() => {
       const response = new Subject<Photo[]>();
       responses.push(response);
@@ -126,12 +126,12 @@ describe('PhotosComponent', () => {
 
     cards()[0].querySelector('button')!.click();
 
-    expect(favorites.toggle).toHaveBeenCalledWith(page[0]);
+    expect(favorites.toggle).toHaveBeenCalledWith(page[0].id);
   });
 
   it('marks favorite photos in the grid', async () => {
     const page = createPage(1);
-    favorites.favoriteIds.set(new Set([page[1].id]));
+    favorites.favoriteIdSet.set(new Set([page[1].id]));
     await respond(page);
 
     const active = cards().slice(0, 3).map(card => card.querySelector('.photo-card__icon--active') !== null);

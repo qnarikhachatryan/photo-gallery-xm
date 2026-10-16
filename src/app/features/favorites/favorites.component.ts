@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
 
@@ -16,8 +16,9 @@ export class FavoritesComponent {
   private readonly router = inject(Router);
 
   protected readonly favorites = inject(FavoritesService);
+  protected readonly photos = computed(() => this.favorites.favoriteIds().map(id => ({ id }) as Photo));
 
-  protected openPhoto(photo: Photo): void {
-    this.router.navigate(['/photos', photo.id]);
+  protected openPhoto(id: string): void {
+    this.router.navigate(['/photos', id]);
   }
 }

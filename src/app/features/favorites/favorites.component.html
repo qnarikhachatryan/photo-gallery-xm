@@ -1,9 +1,9 @@
-@let photos = favorites.favorites();
+@let favoritePhotos = photos();
 
-@if (photos.length) {
+@if (favoritePhotos.length) {
   <app-photo-grid
-    [photos]="photos"
-    [favoriteIds]="favorites.favoriteIds()"
+    [photos]="favoritePhotos"
+    [favoriteIds]="favorites.favoriteIdSet()"
     (photoSelect)="openPhoto($event)"
   />
 } @else {

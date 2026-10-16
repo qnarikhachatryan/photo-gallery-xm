@@ -4,7 +4,7 @@
 @if (!isEmpty) {
   <app-photo-grid
     [photos]="photos"
-    [favoriteIds]="favorites.favoriteIds()"
+    [favoriteIds]="favorites.favoriteIdSet()"
     (photoSelect)="favorites.toggle($event)"
   />
 } @if (store.loading()) {

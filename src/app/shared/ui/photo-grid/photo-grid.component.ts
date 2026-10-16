@@ -17,7 +17,7 @@ export class PhotoGridComponent {
   readonly photos = input.required<Photo[]>();
   readonly favoriteIds = input<ReadonlySet<string>>(new Set());
 
-  readonly photoSelect = output<Photo>();
+  readonly photoSelect = output<string>();
 
   protected readonly priorityPhotosCount = PRIORITY_PHOTOS_COUNT;
 }

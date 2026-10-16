@@ -17,7 +17,7 @@ export class PhotoCardComponent {
   readonly isFavorite = input(false);
   readonly priority = input(false);
 
-  readonly photoSelect = output<Photo>();
+  readonly photoSelect = output<string>();
 
   protected readonly thumbnailUrl = computed(() => buildPhotoUrl(this.photo().id, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT));
 
