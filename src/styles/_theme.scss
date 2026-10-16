@@ -1,0 +1,22 @@
+@use '@angular/material' as mat;
+
+// Material 3 theme. `mat.theme()` emits the `--mat-sys-*` system tokens
+// (color, typography, elevation, shape, state) that every Material component reads.
+// With the default `color-scheme` theme type, colors use CSS `light-dark()`, so the
+// active scheme follows the `color-scheme` property set on the host element.
+@mixin theme() {
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+// App-wide token overrides go here, e.g. `corner-full: 8px` or `primary: #1a73e8`.
+// Prefer overriding system tokens over targeting component internals.
+@mixin overrides() {
+  @include mat.theme-overrides(());
+}
