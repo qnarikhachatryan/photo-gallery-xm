@@ -1,0 +1,48 @@
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  gap: 16px;
+}
+
+.header__logo {
+  font: var(--mat-sys-title-large);
+  color: var(--mat-sys-primary);
+}
+
+.header__nav {
+  display: flex;
+  gap: 16px;
+
+  a {
+    min-width: 140px;
+
+    &.active {
+      color: var(--mat-sys-on-primary);
+      background-color: var(--mat-sys-primary);
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    grid-template-columns: auto 1fr;
+  }
+
+  .header__nav {
+    justify-self: end;
+    gap: 8px;
+
+    a {
+      min-width: 0;
+    }
+  }
+}

@@ -1,0 +1,14 @@
+<mat-toolbar class="header">
+  <span class="header__logo">Photo Gallery</span>
+
+  <nav class="header__nav" aria-label="Main navigation">
+    <a matButton="outlined" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <mat-icon>photo_library</mat-icon>
+      Photos
+    </a>
+    <a matButton="outlined" routerLink="/favorites" routerLinkActive="active">
+      <mat-icon>favorite</mat-icon>
+      Favorites
+    </a>
+  </nav>
+</mat-toolbar>
