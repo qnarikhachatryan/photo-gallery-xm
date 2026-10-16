@@ -1,0 +1,24 @@
+@if (store.loading()) {
+  <app-loader class="photo-detail__loader" />
+} @else if (store.photo(); as currentPhoto) {
+  @let isFavorite = store.isFavorite();
+
+  <div class="photo-detail">
+    <div class="photo-detail__image-wrapper">
+      <img
+        class="photo-detail__image"
+        [ngSrc]="currentPhoto.download_url"
+        [alt]="'Photo by ' + currentPhoto.author"
+        fill
+        priority
+      />
+    </div>
+
+    <div class="photo-detail__actions">
+      <button matButton="filled" type="button" (click)="store.toggleFavorite()">
+        <mat-icon>{{ isFavorite ? 'heart_broken' : 'favorite' }}</mat-icon>
+        {{ isFavorite ? 'Remove from favorites' : 'Add to favorites' }}
+      </button>
+    </div>
+  </div>
+}

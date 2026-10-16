@@ -1,11 +1,11 @@
-import { DestroyRef, inject, Service, signal } from '@angular/core';
+import { DestroyRef, Injectable, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { PHOTOS_PAGE_LIMIT } from '@core/constants/api.constants';
 import { Photo } from '@core/models/photo.model';
 import { PhotoApiService } from '@core/services/photo-api.service';
 
-@Service({ autoProvided: false })
+@Injectable()
 export class PhotoStreamStore {
   private readonly photoApi = inject(PhotoApiService);
   private readonly destroyRef = inject(DestroyRef);
