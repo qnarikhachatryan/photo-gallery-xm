@@ -1,0 +1,10 @@
+<div class="photo-grid">
+  @for (photo of photos(); track photo.id) {
+    <app-photo-card
+      [photo]="photo"
+      [isFavorite]="favoriteIds().has(photo.id)"
+      [priority]="$index < priorityPhotosCount"
+      (photoSelect)="photoSelect.emit($event)"
+    />
+  }
+</div>
