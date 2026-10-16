@@ -11,7 +11,7 @@
   <app-loader [class.photos__loader--initial]="isEmpty" />
 } @else if (store.error()) {
   <div class="photos__error">
-    <p>Could not load photos.</p>
+    <span>Could not load photos</span>
     <button matButton="outlined" type="button" (click)="store.loadNext()">Try again</button>
   </div>
 } @else if (store.hasMore()) {

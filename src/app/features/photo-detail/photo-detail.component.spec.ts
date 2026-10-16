@@ -117,13 +117,28 @@ describe('PhotoDetailComponent', () => {
     expect(button()!.textContent).toContain('Remove from favorites');
   });
 
-  it('renders nothing when the photo cannot be loaded', async () => {
+  it('shows a not found message when the photo cannot be loaded', async () => {
     photoApi.getPhoto.mockReturnValue(throwError(() => new Error('Not found')));
 
     await render('unknown');
 
+    const notFound = element.querySelector('.photo-detail__not-found')!;
+    expect(notFound.querySelector('mat-icon')!.textContent?.trim()).toBe('sentiment_dissatisfied');
+    expect(notFound.textContent).toContain('We could not find this image');
     expect(element.querySelector('app-loader')).toBeNull();
     expect(image()).toBeNull();
     expect(button()).toBeNull();
+  });
+
+  it('does not show the not found message while loading or after a successful load', async () => {
+    photoApi.getPhoto.mockReturnValue(new Subject<Photo>());
+    await render('7');
+
+    expect(element.querySelector('.photo-detail__not-found')).toBeNull();
+
+    photoApi.getPhoto.mockReturnValue(of(PHOTO));
+    await render('7');
+
+    expect(element.querySelector('.photo-detail__not-found')).toBeNull();
   });
 });

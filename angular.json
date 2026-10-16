@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "gallery-template": {
+    "photo-gallery": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -18,7 +18,7 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": {
-              "base": "dist/gallery-template"
+              "base": "dist/photo-gallery"
             },
             "index": "src/index.html",
             "tsConfig": "tsconfig.app.json",
@@ -68,10 +68,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "gallery-template:build:production"
+              "buildTarget": "photo-gallery:build:production"
             },
             "development": {
-              "buildTarget": "gallery-template:build:development"
+              "buildTarget": "photo-gallery:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,7 +79,7 @@
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n",
           "options": {
-            "buildTarget": "gallery-template:build"
+            "buildTarget": "photo-gallery:build"
           }
         },
         "test": {

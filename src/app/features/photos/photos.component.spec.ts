@@ -141,7 +141,7 @@ describe('PhotosComponent', () => {
   it('shows an error with a retry button that requests the same page again', async () => {
     await fail();
 
-    expect(element.textContent).toContain('Could not load photos.');
+    expect(element.textContent).toContain('Could not load photos');
     expect(sentinel()).toBeNull();
 
     element.querySelector<HTMLButtonElement>('.photos__error button')!.click();
